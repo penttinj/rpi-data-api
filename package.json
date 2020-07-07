@@ -1,0 +1,72 @@
+{
+  "name": "rpi-data-api",
+  "version": "0.0.1",
+  "description": "restful api trying to follow solid principles",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx pm2 start pm2.yaml",
+    "dev": "tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
+    "test": "jest --coverage --verbose",
+    "postinstall": "npx tsc"
+  },
+  "jest": {
+    "verbose": true,
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/penttinj/rpi-data-api.git"
+  },
+  "author": "Johan Penttinen",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/penttinj/rpi-data-api/issues"
+  },
+  "homepage": "https://github.com/penttinj/rpi-data-api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.0",
+    "got": "^11.4.0",
+    "mongoose": "^5.9.22",
+    "swagger-ui-express": "^4.1.4",
+    "typescript": "^3.9.6",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.0",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.7",
+    "@types/got": "^9.6.11",
+    "@types/jest": "^26.0.4",
+    "@types/mongoose": "^5.7.30",
+    "@types/node": "^14.0.19",
+    "@types/supertest": "^2.0.10",
+    "@types/swagger-ui-express": "^4.1.2",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^3.6.0",
+    "@typescript-eslint/parser": "^3.6.0",
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "jest": "^26.1.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.1.1",
+    "tsc-watch": "^4.2.9"
+  }
+}
