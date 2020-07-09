@@ -1,0 +1,16 @@
+POST http://localhost:4000/api/sensors?q=12 HTTP/1.1
+content-type: application/json
+
+{
+    "things": [
+      {
+        "name": "temperature",
+        "value": 23
+      },
+      {
+        "name": "humidity",
+        "value": 34
+      }
+    ],
+    "bar": "foo"
+}

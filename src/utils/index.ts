@@ -48,11 +48,11 @@ export const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
   defaultMeta: {
-    get timeLogged() { return new Date().toLocaleString(); },
+    get time() { return new Date().toLocaleString(); },
   },
   transports: [
     new winston.transports.File({ filename: "error.log", level: "error" }),
-    new winston.transports.File({ filename: "testrest.log" }),
+    new winston.transports.File({ filename: "api.log" }),
   ],
 });
 

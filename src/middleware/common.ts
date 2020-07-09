@@ -17,7 +17,6 @@ export const trafficLog = (router: Router) => {
   router.use((req: Request, res: Response, next: NextFunction) => {
     const { url } = req;
     const time = new Date();
-    // console.log(`Received request for ${url} at ${time}`);
     logger.log({
       level: "info",
       message: `Received request for ${url}`,

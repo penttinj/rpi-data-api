@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { HTTPClientError, HTTP404Error } from "./httpErrors";
 import config from "../config";
+import { logger } from ".";
 
 interface StatusError extends Error {
   statusCode: number;
@@ -13,7 +14,7 @@ export const notFoundError = () => {
 
 export const clientError = (err: Error, res: Response, next: NextFunction) => {
   if (err instanceof HTTPClientError) {
-    console.warn(err);
+    logger.info(err.stack);
     res.status(err.statusCode).send(err.message);
   } else {
     next(err);
@@ -22,12 +23,13 @@ export const clientError = (err: Error, res: Response, next: NextFunction) => {
 
 export const serverError = (err: Error | StatusError, res: Response, next: NextFunction) => {
   if (config.NODE_ENV === "production") {
+    logger.error(err.stack);
     res.status(500).send("Internal Server Error.");
   } else if ((err as StatusError).responseBody) {
-    console.log("Server Error: Rejection from a promise probably happened");
-    res.status(500).send(`<b>CAUGHT REJECTION</b><br/>${err.stack}`);
+    logger.error({ message: err.stack, type: "Rejection", responseBody: (err as StatusError).responseBody });
+    res.status(500).send(`<b>Caught Rejection:</b><br/>${err.stack}`);
   } else {
-    console.log("Server Error 500");
+    logger.error(err.stack);
     res.status(500).send(err.stack);
   }
 };

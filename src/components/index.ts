@@ -1,5 +1,5 @@
-import atmosphericsRoutes from "./atmospherics/routes";
+import sensorsRoutes from "./sensors/routes";
 
 export default [
-  ...atmosphericsRoutes,
+  ...sensorsRoutes,
 ];
