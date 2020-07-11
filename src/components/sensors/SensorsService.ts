@@ -4,5 +4,5 @@ interface ISensorData { // Should return historical data too.
 }
 export const getData = (query: Object): ISensorData => {
   console.log("sup data");
-  return { temperature: 12, humidity: 99 };
+  return { temperature: 12, humidity: 19 };
 };

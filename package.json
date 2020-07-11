@@ -2,10 +2,11 @@
   "name": "rpi-data-api",
   "version": "0.0.1",
   "description": "restful api trying to follow solid principles",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "npx pm2 start pm2.yaml",
     "dev": "tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
+    "debug": "npx tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
     "test": "jest --coverage --verbose",
     "postinstall": "npx tsc"
   },

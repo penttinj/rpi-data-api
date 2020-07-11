@@ -12,3 +12,9 @@ export const sensorDataQuery = (req: Request, res: Response, next: NextFunction)
     next();
   }
 };
+
+export const sanitize = (req: Request, res: Response, next: NextFunction) => {
+
+
+
+}
