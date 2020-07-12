@@ -3,13 +3,13 @@ content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk0NTQyMTMzLCJleHAiOjE1OTUxNDY5MzN9.YtPqoFPaXoQwQCjE_md5hMfNYlrjGdLh70CedALjz6E
 
 {
-    "things": [
+    "data": [
       {
-        "name": "temperature<>",
+        "type": "temperature<>",
         "value": 23
       },
       {
-        "name": "humidity",
+        "type": "humidity",
         "value": "34>>"
       }
     ],

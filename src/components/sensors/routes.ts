@@ -7,14 +7,13 @@ import { logger } from "../../utils";
 
 export default [
   {
-    path: "/api/sensors/:foo",
+    path: "/api/sensors",
     method: "get",
     handler: [
       authenticate,
       sensorDataQuery,
       async (req: Request, res: Response) => {
         console.log(req.query);
-        console.log(req.params);
         const data = getData(req.query);
         res.status(200).json(data);
         res.end();

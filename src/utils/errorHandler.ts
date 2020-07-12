@@ -48,6 +48,8 @@ export const serverError = (err: Error | StatusError, res: Response, next: NextF
       .json(jsonError("Rejection", 500, err.stack));
   } else {
     logger.error(err.stack);
-    res.status(500).json(jsonError("Internal Server Error", 500, err.stack));
+    res
+      .status(500)
+      .json(jsonError("Internal Server Error", 500, err.stack));
   }
 };
