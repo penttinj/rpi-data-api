@@ -15,10 +15,11 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   console.log(req.headers);
 
   try {
-    jwt.verify(token, JWT_SECRET);
+    const verify = jwt.verify(token, JWT_SECRET);
+    console.log(verify);
     next();
   } catch (e) {
-    console.log("Catch block");
+    console.log(e);
     throw new HTTP401Error();
   }
 };
