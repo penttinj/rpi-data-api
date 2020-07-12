@@ -19,8 +19,8 @@ process.on("uncaughtException", (err: Error) => {
 
 process.on("unhandledRejection", (err: Error) => {
   // TODO: Add winston log
-  console.log("Uncaught Rejection");
   console.log(err);
+  console.log("Uncaught Rejection");
   logger.error(err.stack);
   process.exit(1);
 });

@@ -1,4 +1,4 @@
-POST http://localhost:4000/api/sensors HTTP/1.1
+GET http://localhost:4000/api/sensors?sensors=something,hi,what&count=2 HTTP/1.1
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk0NTQyMTMzLCJleHAiOjE1OTUxNDY5MzN9.YtPqoFPaXoQwQCjE_md5hMfNYlrjGdLh70CedALjz6E
 
