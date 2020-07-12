@@ -15,6 +15,4 @@ export const sensorDataQuery = (req: Request, res: Response, next: NextFunction)
 
 export const sanitize = (req: Request, res: Response, next: NextFunction) => {
 
-
-
-}
+};

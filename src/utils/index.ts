@@ -3,6 +3,7 @@ import {
   Router, Request, Response, NextFunction,
 } from "express";
 import winston from "winston";
+import jwt from "jsonwebtoken";
 import config from "../config";
 
 export const emptyQuery = (query: Object): boolean => {
@@ -44,7 +45,7 @@ export const applyRoutes = (
   }
 };
 
-export const logger = winston.createLogger({
+export const logger: winston.Logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
   defaultMeta: {
@@ -61,3 +62,20 @@ if (config.NODE_ENV !== 'production') {
     format: winston.format.simple(),
   }));
 }
+
+// TEST CODE, DELETE DIS. Only used for creating tokens in development
+export const createToken = () => {
+  try {
+    const JWT_SECRET = config.JWT_SECRET_KEY as jwt.Secret;
+    const id = 321;
+
+    const accessToken = jwt.sign({ sub: id }, JWT_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: "7d",
+    });
+    console.log("Access Token Generated: ", accessToken);
+    return accessToken;
+  } catch (e) {
+    throw new Error('Couldn\'t be created');
+  }
+};

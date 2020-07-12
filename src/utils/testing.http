@@ -1,5 +1,6 @@
 POST http://localhost:4000/api/sensors HTTP/1.1
 content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk0NTQyMTMzLCJleHAiOjE1OTUxNDY5MzN9.YtPqoFPaXoQwQCjE_md5hMfNYlrjGdLh70CedALjz6E
 
 {
     "things": [
@@ -9,7 +10,7 @@ content-type: application/json
       },
       {
         "name": "humidity",
-        "value": 34
+        "value": "34>>"
       }
     ],
     "bar": "foo",

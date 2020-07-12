@@ -1,14 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import { body } from "express-validator";
 import { sensorDataQuery } from "./checks";
+import { authenticate } from "../../middleware/authenticate";
 import { getData } from "./SensorsService";
 import { logger } from "../../utils";
 
 export default [
   {
-    path: "/api/sensors/:parr",
+    path: "/api/sensors/:foo",
     method: "get",
     handler: [
+      authenticate,
       sensorDataQuery,
       async (req: Request, res: Response) => {
         console.log(req.query);
@@ -23,7 +25,9 @@ export default [
     path: "/api/sensors",
     method: "post",
     handler: [
-      body(["things.*.name", "things.*.value"]).escape(),
+      authenticate,
+      body(["data.*.type", "data.*.value"]).escape(),
+      // TODO: Add more input checks
       async (req: Request, res: Response) => {
         console.log(req.body);
         res.status(200).json(req.body);

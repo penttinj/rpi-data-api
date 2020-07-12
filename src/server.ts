@@ -2,7 +2,9 @@
 import http from "http";
 import express from "express";
 import config from "./config";
-import { applyMiddleware, applyRoutes, logger } from "./utils";
+import {
+  applyMiddleware, applyRoutes, logger, createToken,
+} from "./utils";
 import middleware from "./middleware";
 import routes from "./components";
 import errorHandlers from "./middleware/errorHandlers";
@@ -27,6 +29,8 @@ const router = express();
 applyMiddleware(middleware, router);
 applyRoutes(routes, router);
 applyMiddleware(errorHandlers, router);
+
+const token = createToken();
 const server = http.createServer(router);
 
 server.listen(config.PORT, () => console.log(`Server is running http://localhost:${config.PORT}...`));
