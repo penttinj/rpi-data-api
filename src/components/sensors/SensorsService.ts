@@ -1,18 +1,43 @@
-interface ISensorData { // Should return historical data too.
-  temperature?: number;
-  humidity?: number;
+interface dataPoint {
+  type: string;
+  value: number;
+  date: Date;
 }
 
-interface IHistoricalData {
+interface IHistoricalDataQuery {
   sensors: string | string[];
   count: number;
 }
 
-type dataQuery = string | string[] | IHistoricalData;
+type TData = dataPoint[][]; // Is this stupid? :D
+type status = "success" | "fail";
+type TResponse = {
+  status: status,
+  message: string,
+  data: TData
+};
 
-export const getData = async (query: dataQuery) => {
-  console.log("sup data");
-  return { temperature: 12, humidity: 19 };
+const hello: dataPoint = {
+  type: "erer",
+  value: 122,
+  date: new Date(),
+};
+
+const mockResponse: TData = [
+  [hello, hello, hello],
+  [hello, hello, hello],
+  [hello, hello, hello],
+];
+
+type dataQuery = string | string[] | IHistoricalDataQuery;
+
+export const getData = async (query: dataQuery): Promise<TResponse> => {
+  console.log("getData: ", query);
+  return {
+    status: "success",
+    message: "this could say which sensors we got",
+    data: mockResponse,
+  };
 };
 
 export const parseRequest = async (sensors: string, c?: string) => {

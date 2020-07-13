@@ -5,7 +5,6 @@ import { authenticate } from "../../middleware/authenticate";
 import { handleValidator } from "../../middleware/handleValidator";
 import { getData, parseRequest } from "./SensorsService";
 import { logger } from "../../utils";
-import { HTTP400Error } from "../../utils/httpErrors";
 
 export default [
   {
@@ -22,6 +21,7 @@ export default [
         const { sensors, count } = req.query;
         const parsedQuery = await parseRequest(sensors as string, count as string);
         const data = await getData(parsedQuery);
+        console.log(data);
         res.status(200).json(data);
         res.end();
       },
