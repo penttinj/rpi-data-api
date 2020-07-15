@@ -3,12 +3,11 @@ interface dataPoint {
   value: number;
   date: Date;
 }
-
 interface IHistoricalDataQuery {
   sensors: string | string[];
   count: number;
 }
-
+type dataQuery = string | string[] | IHistoricalDataQuery;
 type TData = dataPoint[][]; // Is this stupid? :D
 type status = "success" | "fail";
 type TResponse = {
@@ -28,8 +27,6 @@ const mockResponse: TData = [
   [hello, hello, hello],
   [hello, hello, hello],
 ];
-
-type dataQuery = string | string[] | IHistoricalDataQuery;
 
 export const getData = async (query: dataQuery): Promise<TResponse> => {
   console.log("getData: ", query);

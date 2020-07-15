@@ -56,4 +56,14 @@ export default [
       },
     ],
   },
+  {
+    path: "/api/sensors",
+    method: "options",
+    handler: [
+      authenticate,
+      async (req: Request, res: Response) => {
+        console.log("");
+      },
+    ],
+  },
 ];
