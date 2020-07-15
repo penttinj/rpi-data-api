@@ -1,6 +1,6 @@
-GET http://localhost:4000/api/sensors?sensors=something,hi,what&count=2 HTTP/1.1
+GET http://localhost:2323/api/sensors/hey?sensors=co2,hi,what&count=5 HTTP/1.1
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk0NTQyMTMzLCJleHAiOjE1OTUxNDY5MzN9.YtPqoFPaXoQwQCjE_md5hMfNYlrjGdLh70CedALjz6E
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk0ODI4OTI5LCJleHAiOjE1OTU0MzM3Mjl9.Ai2jRyK2lqgbtJ9yM6LSlDkwJHwLde8KYCIbwkRANxQ
 
 {
     "data": [
@@ -15,4 +15,4 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk0
     ],
     "bar": "foo",
     "q": ".<>åöä##{}[]"
-}
+} 

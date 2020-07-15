@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { body, check, query } from "express-validator";
 import { sensorDataQuery } from "./checks";
 import { authenticate } from "../../middleware/authenticate";
-import { handleValidator } from "../../middleware/handleValidator";
+import { handleValidatorResult } from "../../middleware/handleValidatorResult";
 import { getData, parseRequest } from "./SensorsService";
 import { logger } from "../../utils";
 
@@ -12,10 +12,10 @@ export default [
     method: "get",
     handler: [
       authenticate,
+      query("sensors").exists().trim().escape(),
+      query("count").trim().isNumeric().escape(),
       sensorDataQuery,
-      query("sensors").exists(),
-      query("count").isNumeric(),
-      handleValidator,
+      handleValidatorResult,
       async (req: Request, res: Response) => {
         console.log(req.query);
         const { sensors, count } = req.query;
@@ -36,8 +36,7 @@ export default [
       async (req: Request, res: Response) => {
         console.log(req.query);
         console.log(req.params);
-        const data = getData("hello");
-        res.status(200).json(data);
+        res.status(200).json({"hey": "yo"});
         res.end();
       },
     ],

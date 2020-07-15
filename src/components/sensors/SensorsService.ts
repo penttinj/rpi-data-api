@@ -10,7 +10,7 @@ interface IHistoricalDataQuery {
 type dataQuery = string | string[] | IHistoricalDataQuery;
 type TData = dataPoint[][]; // Is this stupid? :D
 type status = "success" | "fail";
-type TResponse = {
+type TSensorGETResponse = {
   status: status,
   message: string,
   data: TData
@@ -22,18 +22,18 @@ const hello: dataPoint = {
   date: new Date(),
 };
 
-const mockResponse: TData = [
+const mockData: TData = [
   [hello, hello, hello],
   [hello, hello, hello],
   [hello, hello, hello],
 ];
 
-export const getData = async (query: dataQuery): Promise<TResponse> => {
+export const getData = async (query: dataQuery): Promise<TSensorGETResponse> => {
   console.log("getData: ", query);
   return {
     status: "success",
     message: "this could say which sensors we got",
-    data: mockResponse,
+    data: mockData,
   };
 };
 
