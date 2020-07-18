@@ -8,6 +8,7 @@ import {
 import middleware from "./middleware";
 import routes from "./components";
 import errorHandlers from "./middleware/errorHandlers";
+import { initMongo } from "./config/mongodb";
 
 process.on("uncaughtException", (err: Error) => {
   // TODO: Add winston log
@@ -25,12 +26,15 @@ process.on("unhandledRejection", (err: Error) => {
   process.exit(1);
 });
 
-const router = express();
-applyMiddleware(middleware, router);
-applyRoutes(routes, router);
-applyMiddleware(errorHandlers, router);
+async function go() {
+  const router = express();
+  applyMiddleware(middleware, router);
+  applyRoutes(routes, router);
+  applyMiddleware(errorHandlers, router);
 
-const token = createToken();
-const server = http.createServer(router);
-
-server.listen(config.PORT, () => console.log(`Server is running http://localhost:${config.PORT}...`));
+  const token = createToken();
+  const server = http.createServer(router);
+  await initMongo();
+  server.listen(config.PORT, () => console.log(`Server is listening on http://localhost:${config.PORT}...`));
+}
+go();

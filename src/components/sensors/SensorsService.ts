@@ -1,7 +1,9 @@
+import { Sensor } from "./SensorsModel";
+
 interface dataPoint {
   type: string;
   value: number;
-  date: Date;
+  time: number;
 }
 interface IHistoricalDataQuery {
   sensors: string | string[];
@@ -19,7 +21,7 @@ type TSensorGETResponse = {
 const hello: dataPoint = {
   type: "erer",
   value: 122,
-  date: new Date(),
+  time: new Date().getTime(),
 };
 
 const mockData: TData = [
@@ -30,6 +32,37 @@ const mockData: TData = [
 
 export const getData = async (query: dataQuery): Promise<TSensorGETResponse> => {
   console.log("getData: ", query);
+  const sensor = new Sensor({
+    name: "Temperature",
+    value: 9,
+    time: new Date().getTime() / 1000,
+    place: "Outside",
+  });
+
+  sensor
+    .save()
+    .then((result) => {
+      console.log("sensor saved!");
+      console.log(result);
+    });
+
+  if (Array.isArray(query)) {
+    console.log("is array");
+  }
+  switch (typeof query) {
+    case "string":
+      console.log("is string");
+      // Get single sensor from model
+      break;
+    case "object":
+      console.log("is object");
+      // Get single or multiple sensors historical data
+      // If single, could use same call as string case, function just has optional count arg
+      break;
+    default:
+      // Unhandled case, we bork it
+      throw new Error("Unhandled case");
+  }
   return {
     status: "success",
     message: "this could say which sensors we got",

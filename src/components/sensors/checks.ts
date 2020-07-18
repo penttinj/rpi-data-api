@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import {
   Request, Response, NextFunction, RequestHandler,
 } from "express";
@@ -22,8 +23,7 @@ export const sensorDataQuery = (req: Request, res: Response, next: NextFunction)
     throw new HTTP400Error("Queries were empty (atmos)");
   } else if (!mustInclude((req.query.sensors as string).split(","), sensorList)) {
     throw new HTTP400Error("Sensors query contains illegal elements");
-  }
-  else {
+  } else {
     next();
   }
 };

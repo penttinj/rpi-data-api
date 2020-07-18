@@ -36,7 +36,7 @@ export default [
       async (req: Request, res: Response) => {
         console.log(req.query);
         console.log(req.params);
-        res.status(200).json({"hey": "yo"});
+        res.status(200).json({ hey: "yo" });
         res.end();
       },
     ],
