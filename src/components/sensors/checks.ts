@@ -5,7 +5,7 @@ import {
 import { logger, emptyQuery } from "../../utils";
 import { HTTP400Error } from "../../utils/httpErrors";
 
-const sensorList = ["temperature", "humidity", "co2"];
+export const sensorList = ["outside_temperature", "outside_humidity", "co2"];
 
 const mustInclude = (queries: string[], comparitor: string[]): boolean => {
   for (const val of queries) {

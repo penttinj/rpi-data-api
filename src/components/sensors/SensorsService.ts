@@ -1,50 +1,45 @@
-import { Sensor } from "./SensorsModel";
+import { Sensor, saveSensorData } from "./SensorsModel";
 
-interface dataPoint {
-  type: string;
+type UnixTime = number;
+interface DataPoint {
+  name: string;
   value: number;
-  time: number;
+  place: string;
+  time: UnixTime;
 }
 interface IHistoricalDataQuery {
   sensors: string | string[];
   count: number;
 }
 type dataQuery = string | string[] | IHistoricalDataQuery;
-type TData = dataPoint[][]; // Is this stupid? :D
+type Data = DataPoint[][]; // Is this stupid? :D
 type status = "success" | "fail";
-type TSensorGETResponse = {
+type SensorGETResponse = {
   status: status,
   message: string,
-  data: TData
+  data: Data
 };
+export interface SensorData {
+  name: string;
+  value: number;
+  place: string;
+}
 
-const hello: dataPoint = {
-  type: "erer",
+const hello: DataPoint = {
+  name: "erer",
   value: 122,
+  place: "Inside",
   time: new Date().getTime(),
 };
 
-const mockData: TData = [
+const mockData: Data = [
   [hello, hello, hello],
   [hello, hello, hello],
   [hello, hello, hello],
 ];
 
-export const getData = async (query: dataQuery): Promise<TSensorGETResponse> => {
+export const getData = async (query: dataQuery): Promise<SensorGETResponse> => {
   console.log("getData: ", query);
-  const sensor = new Sensor({
-    name: "Temperature",
-    value: 9,
-    time: new Date().getTime() / 1000,
-    place: "Outside",
-  });
-
-  sensor
-    .save()
-    .then((result) => {
-      console.log("sensor saved!");
-      console.log(result);
-    });
 
   if (Array.isArray(query)) {
     console.log("is array");
@@ -81,4 +76,24 @@ export const parseRequest = async (sensors: string, c?: string) => {
     console.log("returning just sensors");
     return parsedSensors;
   }
+};
+
+export const postData = async (body: SensorData) => {
+  console.log("In post data");
+  return new Promise((resolve, reject) => {
+    saveSensorData(body);
+    const sensor = new Sensor({
+      name: "Temperature",
+      value: 9,
+      time: new Date().getTime() / 1000,
+      place: "Outside",
+    });
+
+    sensor
+      .save()
+      .then((result) => {
+        console.log("sensor saved!");
+        console.log(result);
+      });
+  });
 };

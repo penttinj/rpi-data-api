@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { SensorData } from "./SensorsService";
 
 export type SensorDocument = mongoose.Document & {
   name: string,
@@ -13,5 +14,9 @@ const sensorSchema = new mongoose.Schema({
   time: Number,
   place: String,
 }, { timestamps: true });
+
+export const saveSensorData = async (data: SensorData) => {
+  console.log("savesensordata");
+};
 
 export const Sensor = mongoose.model<SensorDocument>("Sensor", sensorSchema);
