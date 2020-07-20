@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { HTTPClientError, HTTP404Error } from "./httpErrors";
-import config from "../config";
+import { NODE_ENV } from "../config";
 import { logger } from ".";
 
 interface StatusError extends Error {
@@ -8,13 +8,13 @@ interface StatusError extends Error {
   responseBody: any;
 }
 
-type TJsonError = {
+type JsonError = {
   error: HTTPClientError["statusCode"];
   message: HTTPClientError["message"];
   stack?: string | undefined;
 }
 
-const jsonError = (message: string, error: number, stack?: string | undefined): TJsonError => ({
+const jsonError = (message: string, error: number, stack?: string | undefined): JsonError => ({
   error,
   message,
   stack,
@@ -36,7 +36,7 @@ export const clientError = (err: Error, res: Response, next: NextFunction) => {
 };
 
 export const serverError = (err: Error | StatusError, res: Response, next: NextFunction) => {
-  if (config.NODE_ENV === "production") {
+  if (NODE_ENV === "production") {
     logger.error(err.stack);
     res
       .status(500)

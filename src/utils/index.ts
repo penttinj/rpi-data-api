@@ -4,7 +4,7 @@ import {
 } from "express";
 import winston from "winston";
 import jwt from "jsonwebtoken";
-import config from "../config";
+import { NODE_ENV, JWT_SECRET } from "../config";
 
 export const emptyQuery = (query: Object): boolean => {
   if (Object.keys(query).length === 0) return true;
@@ -57,8 +57,8 @@ export const logger: winston.Logger = winston.createLogger({
   ],
 });
 
-if (config.NODE_ENV !== 'production') {
-  console.log("Adding winston");
+if (NODE_ENV !== 'production') {
+  console.log("Adding winston console log");
   logger.add(new winston.transports.Console({
     format: winston.format.simple(),
     level: "silly",
@@ -68,16 +68,15 @@ if (config.NODE_ENV !== 'production') {
 // TEST CODE, DELETE DIS. Only used for creating tokens in development
 export const createToken = () => {
   try {
-    const JWT_SECRET = config.JWT_SECRET_KEY as jwt.Secret;
     const id = 321;
 
-    const accessToken = jwt.sign({ sub: id }, JWT_SECRET, {
+    const accessToken = jwt.sign({ sub: id }, JWT_SECRET as jwt.Secret, {
       algorithm: 'HS256',
       expiresIn: "7d",
     });
     console.log("Access Token Generated: ", accessToken);
     return accessToken;
   } catch (e) {
-    throw new Error('Couldn\'t be created');
+    throw new Error('Token Couldn\'t be created');
   }
 };

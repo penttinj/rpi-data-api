@@ -1,18 +1,9 @@
-GET http://localhost:4000/api/sensors?sensors=co2&count=5 HTTP/1.1
+POST http://localhost:4000/api/sensors?sensors=co2&count=5 HTTP/1.1
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk1MDcxMDI0LCJleHAiOjE1OTU2NzU4MjR9._BLrL4-l7JVJxma0VvovB6aRpVOrKt5GtQPNwFW9dco
 
 {
-    "data": [
-      {
-        "type": "temperature<>",
-        "value": 23
-      },
-      {
-        "type": "humidity",
-        "value": "34>>"
-      }
-    ],
-    "bar": "foo",
-    "q": ".<>åöä##{}[]"
-} 
+  "name": "Outside_Temperature",
+  "value": 13.3,
+  "place": "Outside"
+}

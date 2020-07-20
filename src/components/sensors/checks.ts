@@ -20,7 +20,10 @@ const mustInclude = (queries: string[], comparitor: string[]): boolean => {
 export const sensorDataQuery = (req: Request, res: Response, next: NextFunction) => {
   if (emptyQuery(req.query)) {
     logger.info("Query object is empty");
-    throw new HTTP400Error("Queries were empty (atmos)");
+    throw new HTTP400Error("Queries were empty");
+  } else if (emptyQuery(req.query)) {
+    logger.info("Query object is empty");
+    throw new HTTP400Error("Queries were empty");
   } else if (!mustInclude((req.query.sensors as string).split(","), sensorList)) {
     throw new HTTP400Error("Sensors query contains illegal elements");
   } else {

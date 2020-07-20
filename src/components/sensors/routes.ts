@@ -3,7 +3,7 @@ import { body, check, query } from "express-validator";
 import { sensorDataQuery } from "./checks";
 import { authenticate } from "../../middleware/authenticate";
 import { handleValidatorResult } from "../../middleware/handleValidatorResult";
-import { getData, parseRequest } from "./SensorsService";
+import * as SensorsService from "./SensorsService";
 import { logger } from "../../utils";
 
 export default [
@@ -19,8 +19,8 @@ export default [
       async (req: Request, res: Response) => {
         console.log(req.query);
         const { sensors, count } = req.query;
-        const parsedQuery = await parseRequest(sensors as string, count as string);
-        const data = await getData(parsedQuery);
+        const parsedQuery = await SensorsService.parseRequest(sensors as string, count as string);
+        const data = await SensorsService.getData(parsedQuery);
         console.log(data);
         res.status(200).json(data);
         res.end();
@@ -48,9 +48,22 @@ export default [
       authenticate,
       body(["data.*.type", "data.*.value"]).escape(),
       // TODO: Add more input checks
-      async (req: Request, res: Response) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         console.log(req.body);
-        res.status(200).json(req.body);
+        // const mockBody = { name: "outside_temperature", value: 24, place: "Outside" };
+        const rawData = {
+          name: req.body.name,
+          value: req.body.value,
+          place: req.body.place,
+        };
+        const result = await SensorsService.postData(rawData)
+        /**
+         * Not sure if having a .catch() or try/catch block here is sane, as it also requires this
+         * main controller fuinction to also have a next(). Since something weird unaccounted for
+         * happened at the Service/Model level, maybe this process should just crash?
+         */
+          .catch((e) => next(e));
+        res.status(200).json(result);
         res.end();
       },
     ],

@@ -1,7 +1,7 @@
 /* eslint-disable no-process-exit */
 import http from "http";
 import express from "express";
-import config from "./config";
+import { PORT } from "./config";
 import {
   applyMiddleware, applyRoutes, logger, createToken,
 } from "./utils";
@@ -35,6 +35,6 @@ async function go() {
   const token = createToken();
   const server = http.createServer(router);
   await initMongo();
-  server.listen(config.PORT, () => console.log(`Server is listening on http://localhost:${config.PORT}...`));
+  server.listen(PORT, () => console.log(`Server is listening on http://localhost:${PORT}...`));
 }
 go();

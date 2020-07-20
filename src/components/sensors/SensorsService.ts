@@ -1,7 +1,7 @@
-import { Sensor, saveSensorData } from "./SensorsModel";
+import { Sensor, insertData } from "./SensorsModel";
 
 type UnixTime = number;
-interface DataPoint {
+export interface DataPoint {
   name: string;
   value: number;
   place: string;
@@ -14,12 +14,17 @@ interface IHistoricalDataQuery {
 type dataQuery = string | string[] | IHistoricalDataQuery;
 type Data = DataPoint[][]; // Is this stupid? :D
 type status = "success" | "fail";
-type SensorGETResponse = {
-  status: status,
-  message: string,
-  data: Data
-};
-export interface SensorData {
+interface Response {
+  status: status;
+  message: string;
+}
+interface SensorGETResponse extends Response {
+  data: Data;
+}
+interface SensorPOSTResponse extends Response {
+  somethingHereMaybe: number;
+}
+export interface RawSensorData {
   name: string;
   value: number;
   place: string;
@@ -78,22 +83,26 @@ export const parseRequest = async (sensors: string, c?: string) => {
   }
 };
 
-export const postData = async (body: SensorData) => {
+export const postData = async (
+  { name, value, place }: RawSensorData,
+): Promise<SensorPOSTResponse> => {
   console.log("In post data");
   return new Promise((resolve, reject) => {
-    saveSensorData(body);
-    const sensor = new Sensor({
-      name: "Temperature",
-      value: 9,
-      time: new Date().getTime() / 1000,
-      place: "Outside",
-    });
+    const dataPoint = {
+      name,
+      value,
+      place,
+      time: Math.floor(new Date().getTime() / 1000),
+    };
 
-    sensor
-      .save()
+    insertData(dataPoint)
       .then((result) => {
-        console.log("sensor saved!");
-        console.log(result);
+        console.log("result:", result);
+        resolve({ status: "success", message: "Aw yeah you did it!", somethingHereMaybe: result.time });
+      })
+      .catch((e) => {
+        console.log("Catch block in postData()");
+        reject(e);
       });
   });
 };
