@@ -58,7 +58,6 @@ export const logger: winston.Logger = winston.createLogger({
 });
 
 if (NODE_ENV !== 'production') {
-  console.log("Adding winston console log");
   logger.add(new winston.transports.Console({
     format: winston.format.simple(),
     level: "silly",

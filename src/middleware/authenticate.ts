@@ -10,15 +10,11 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
     console.log("No authorization header");
     throw new HTTP401Error();
   }
-  console.log("headers");
-  console.log(req.headers);
 
   try {
     const verify = jwt.verify(token, JWT_SECRET as jwt.Secret);
-    console.log(verify);
     next();
   } catch (e) {
-    console.log(e);
     throw new HTTP401Error();
   }
 };
