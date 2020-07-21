@@ -46,17 +46,13 @@ export default [
     method: "post",
     handler: [
       authenticate,
-      body(["data.*.type", "data.*.value"]).escape(),
+      body(["data.*.name", "data.*.value", "data.*.place"]).escape(),
       // TODO: Add more input checks
       async (req: Request, res: Response, next: NextFunction) => {
         console.log(req.body);
         // const mockBody = { name: "outside_temperature", value: 24, place: "Outside" };
-        const rawData = {
-          name: req.body.name,
-          value: req.body.value,
-          place: req.body.place,
-        };
-        const result = await SensorsService.postData(rawData)
+
+        const result = await SensorsService.postData(req.body.data)
         /**
          * Not sure if having a .catch() or try/catch block here is sane, as it also requires this
          * main controller fuinction to also have a next(). Since something weird unaccounted for

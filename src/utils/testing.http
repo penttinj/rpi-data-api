@@ -3,7 +3,21 @@ content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk1MDcxMDI0LCJleHAiOjE1OTU2NzU4MjR9._BLrL4-l7JVJxma0VvovB6aRpVOrKt5GtQPNwFW9dco
 
 {
-  "name": "Outside_Temperature",
-  "value": 13.3,
-  "place": "Outside"
+  "data": [
+    {
+      "name": "Outside_Temperature",
+      "value": 99.5,
+      "place": "Outside"
+    },
+    {
+      "name": "inside_humidity",
+      "value": 44,
+      "place": "inside"
+    },
+    {
+      "name": "Inside_TempeRaTuRe",
+      "value": 99.5,
+      "place": "Outside"
+    }
+  ]
 }

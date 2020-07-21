@@ -70,7 +70,7 @@ export const createToken = () => {
   try {
     const id = 321;
 
-    const accessToken = jwt.sign({ sub: id }, JWT_SECRET as jwt.Secret, {
+    const accessToken = jwt.sign({ userId: id }, JWT_SECRET as jwt.Secret, {
       algorithm: 'HS256',
       expiresIn: "7d",
     });

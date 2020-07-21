@@ -1,4 +1,4 @@
-import { Sensor, insertData } from "./SensorsModel";
+import { Sensor } from "./SensorsModel";
 
 type UnixTime = number;
 export interface DataPoint {
@@ -22,7 +22,7 @@ interface SensorGETResponse extends Response {
   data: Data;
 }
 interface SensorPOSTResponse extends Response {
-  somethingHereMaybe: number;
+  handledSensors: string[];
 }
 export interface RawSensorData {
   name: string;
@@ -84,25 +84,14 @@ export const parseRequest = async (sensors: string, c?: string) => {
 };
 
 export const postData = async (
-  { name, value, place }: RawSensorData,
+  rawData: RawSensorData[],
 ): Promise<SensorPOSTResponse> => {
   console.log("In post data");
-  return new Promise((resolve, reject) => {
-    const dataPoint = {
-      name,
-      value,
-      place,
-      time: Math.floor(new Date().getTime() / 1000),
-    };
+  const dataArray = rawData.map((el) => ({
+    ...el,
+    time: Math.floor(new Date().getTime() / 1000),
+  }));
 
-    insertData(dataPoint)
-      .then((result) => {
-        console.log("result:", result);
-        resolve({ status: "success", message: "Aw yeah you did it!", somethingHereMaybe: result.time });
-      })
-      .catch((e) => {
-        console.log("Catch block in postData()");
-        reject(e);
-      });
-  });
+  const record = await Sensor.create(dataArray);
+  return { status: "success", message: "Sensors were saved!", handledSensors: record.map((e) => e.name) };
 };
