@@ -4,6 +4,7 @@ import {
 } from "express";
 import { logger, emptyQuery } from "../../utils";
 import { HTTP400Error } from "../../utils/httpErrors";
+import { RawSensorData } from "./SensorsService";
 
 // This list could become an .env var or some json file.
 export const sensorList = [
@@ -13,9 +14,11 @@ export const sensorList = [
   "outside_humidity",
   "co2"];
 
-const mustInclude = (queries: string[], comparitor: string[]): boolean => {
+const MAX_QUERY_LENGTH = sensorList.length + 1;
+
+const mustInclude = (queries: string[], compareList: string[]): boolean => {
   for (const val of queries) {
-    if (!comparitor.includes(val)) {
+    if (!compareList.includes(val)) {
       console.log("does not include", val);
       return false;
     }
@@ -23,15 +26,25 @@ const mustInclude = (queries: string[], comparitor: string[]): boolean => {
   return true;
 };
 
-export const sensorDataQuery = (req: Request, res: Response, next: NextFunction) => {
+export const queryCheck = (req: Request, res: Response, next: NextFunction) => {
   if (emptyQuery(req.query)) {
     logger.info("Query object is empty");
     throw new HTTP400Error("Queries were empty");
-  } else if (emptyQuery(req.query)) {
-    logger.info("Query object is empty");
-    throw new HTTP400Error("Queries were empty");
+  } else if (Object.keys(req.query).length > MAX_QUERY_LENGTH) {
+    throw new HTTP400Error("Too many parameters");
   } else if (!mustInclude((req.query.sensors as string).split(","), sensorList)) {
     throw new HTTP400Error("Sensors query contains illegal elements");
+  } else {
+    next();
+  }
+};
+
+export const bodyCheck = (req: Request, res: Response, next: NextFunction) => {
+  if (!mustInclude(
+    req.body.data.map((el: RawSensorData) => el.name.toLocaleLowerCase()),
+    sensorList,
+  )) {
+    throw new HTTP400Error("The sensors list contains illegal elements");
   } else {
     next();
   }

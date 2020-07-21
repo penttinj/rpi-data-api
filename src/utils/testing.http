@@ -1,13 +1,14 @@
 POST http://localhost:4000/api/sensors?sensors=co2&count=5 HTTP/1.1
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk1MDcxMDI0LCJleHAiOjE1OTU2NzU4MjR9._BLrL4-l7JVJxma0VvovB6aRpVOrKt5GtQPNwFW9dco
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMyMSwiaWF0IjoxNTk1MzI1NzI1LCJleHAiOjE1OTU5MzA1MjV9.1qfw9S2PBdP2m0RWBaS0f5JKNAp3dXMmh5sCw0y_8Ss
 
 {
   "data": [
     {
       "name": "Outside_Temperature",
       "value": 99.5,
-      "place": "Outside"
+      "place": "Outside",
+      "thinggg": "qwepoi"
     },
     {
       "name": "inside_humidity",
@@ -16,7 +17,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMyMSwiaWF0IjoxNTk1
     },
     {
       "name": "Inside_TempeRaTuRe",
-      "value": 99.5,
+      "value": 23,
       "place": "Outside"
     }
   ]

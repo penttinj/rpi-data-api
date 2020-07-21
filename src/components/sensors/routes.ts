@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { body, check, query } from "express-validator";
-import { sensorDataQuery } from "./checks";
+import { queryCheck, bodyCheck } from "./checks";
 import { authenticate } from "../../middleware/authenticate";
 import { handleValidatorResult } from "../../middleware/handleValidatorResult";
 import * as SensorsService from "./SensorsService";
@@ -14,7 +14,7 @@ export default [
       authenticate,
       query("sensors").exists().trim().escape(),
       query("count").trim().isNumeric().escape(),
-      sensorDataQuery,
+      queryCheck,
       handleValidatorResult,
       async (req: Request, res: Response) => {
         console.log(req.query);
@@ -47,11 +47,9 @@ export default [
     handler: [
       authenticate,
       body(["data.*.name", "data.*.value", "data.*.place"]).escape(),
+      bodyCheck,
       // TODO: Add more input checks
       async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.body);
-        // const mockBody = { name: "outside_temperature", value: 24, place: "Outside" };
-
         const result = await SensorsService.postData(req.body.data)
         /**
          * Not sure if having a .catch() or try/catch block here is sane, as it also requires this
