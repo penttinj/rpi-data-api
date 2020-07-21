@@ -16,10 +16,11 @@ export const sensorList = [
 
 const MAX_QUERY_LENGTH = sensorList.length + 1;
 
-const mustInclude = (queries: string[], compareList: string[]): boolean => {
-  for (const val of queries) {
-    if (!compareList.includes(val)) {
-      console.log("does not include", val);
+const mustInclude = (query: string | string[], compareList: string[]): boolean => {
+  if (typeof query === "string") return compareList.includes(query.toLocaleLowerCase());
+  for (const val of query) {
+    if (!compareList.includes(val.toLocaleLowerCase())) {
+      console.log("compareList does not include ", val);
       return false;
     }
   }
@@ -32,7 +33,7 @@ export const queryCheck = (req: Request, res: Response, next: NextFunction) => {
     throw new HTTP400Error("Queries were empty");
   } else if (Object.keys(req.query).length > MAX_QUERY_LENGTH) {
     throw new HTTP400Error("Too many parameters");
-  } else if (!mustInclude((req.query.sensors as string).split(","), sensorList)) {
+  } else if (!mustInclude(req.query.sensor as string | string[], sensorList)) {
     throw new HTTP400Error("Sensors query contains illegal elements");
   } else {
     next();

@@ -8,7 +8,7 @@ export interface DataPoint {
   time: UnixTime;
 }
 interface IHistoricalDataQuery {
-  sensors: string | string[];
+  sensor: string | string[];
   count: number;
 }
 type dataQuery = string | string[] | IHistoricalDataQuery;
@@ -70,16 +70,15 @@ export const getData = async (query: dataQuery): Promise<SensorGETResponse> => {
   };
 };
 
-export const parseRequest = async (sensors: string, c?: string) => {
-  const parsedSensors = (/,/.test(sensors)) ? sensors.split(",") : sensors;
+export const parseRequest = async (sensor: string[]|string, c?: string) => {
   if (c) {
     const count = parseInt(c, 10);
     console.log("returning sensors and count");
-    return { sensors: parsedSensors, count };
+    return { sensor, count };
     // eslint-disable-next-line no-else-return
   } else {
     console.log("returning just sensors");
-    return parsedSensors;
+    return sensor;
   }
 };
 

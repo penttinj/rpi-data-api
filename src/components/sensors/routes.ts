@@ -12,14 +12,17 @@ export default [
     method: "get",
     handler: [
       authenticate,
-      query("sensors").exists().trim().escape(),
-      query("count").trim().isNumeric().escape(),
+      query("sensor.*").exists().trim().escape(),
+      query("count").optional().trim().isNumeric()
+        .escape(),
       queryCheck,
       handleValidatorResult,
       async (req: Request, res: Response) => {
-        console.log(req.query);
-        const { sensors, count } = req.query;
-        const parsedQuery = await SensorsService.parseRequest(sensors as string, count as string);
+        console.log("GET /api/sensors", req.query);
+        const { sensor, count } = req.query;
+        const parsedQuery = await SensorsService.parseRequest(
+          sensor as string[]|string, count as string,
+        );
         const data = await SensorsService.getData(parsedQuery);
         console.log(data);
         res.status(200).json(data);
@@ -50,6 +53,7 @@ export default [
       bodyCheck,
       // TODO: Add more input checks
       async (req: Request, res: Response, next: NextFunction) => {
+        console.log(req.query);
         const result = await SensorsService.postData(req.body.data)
         /**
          * Not sure if having a .catch() or try/catch block here is sane, as it also requires this
