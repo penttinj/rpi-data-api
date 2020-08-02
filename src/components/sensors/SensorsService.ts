@@ -1,3 +1,4 @@
+import { userInfo } from "os";
 import { Sensor } from "./SensorsModel";
 
 type UnixTime = number;
@@ -8,14 +9,18 @@ export interface DataPoint {
   time: UnixTime;
 }
 interface IHistoricalDataQuery {
-  sensor: string | string[];
+  sensors: string[];
   count: number;
 }
-type dataQuery = string | string[] | IHistoricalDataQuery;
+interface IPlacesQuery {
+  place: string;
+  count?: number;
+}
+type dataQuery = string[] | IHistoricalDataQuery;
 type Data = DataPoint[][]; // Is this stupid? :D
 type status = "success" | "fail";
 interface Response {
-  status: status;
+  success: boolean;
   message: string;
 }
 interface SensorGETResponse extends Response {
@@ -44,53 +49,64 @@ const mockData: Data = [
 ];
 
 export const getData = async (query: dataQuery): Promise<SensorGETResponse> => {
-  console.log("getData: ", query);
-
+  console.log("getData query: ", query);
+  const result: DataPoint[][] = [];
   if (Array.isArray(query)) {
-    console.log("is array");
+    if (query.length === 1) {
+      // Get single sensor
+      const data = await Sensor.findByName(query);
+      console.log("getData single sensoe result:", data);
+      result.push(data);
+    } else {
+      // Get multiple sensors
+      const data = await Sensor.findByName(query);
+      console.log("getData multiple sensor result:", (data as DataPoint[]).map((v) => v.name));
+      result.push(data);
+    }
+  } else if (typeof query === "object" && (query as IHistoricalDataQuery).count) {
+    console.log("is history object");
+    const data = await Sensor.findByName(query.sensors, query.count);
+    result.push(data);
   }
-  switch (typeof query) {
-    case "string":
-      console.log("is string");
-      // Get single sensor from model
-      break;
-    case "object":
-      console.log("is object");
-      // Get single or multiple sensors historical data
-      // If single, could use same call as string case, function just has optional count arg
-      break;
-    default:
-      // Unhandled case, we bork it
-      throw new Error("Unhandled case");
+
+  if (result.length) {
+    console.log("return success");
+    return {
+      success: true,
+      message: `Returned ${result.flat().length} data points`,
+      data: result,
+    };
   }
+  console.log("reached behind all if expressions");
   return {
-    status: "success",
-    message: "this could say which sensors we got",
-    data: mockData,
+    success: false,
+    message: `Returned: ${result.flat().length} data points`,
+    data: result,
   };
 };
 
-export const parseRequest = async (sensor: string[]|string, c?: string) => {
+export const parseRequest = async (sensor: string[] | string, c?: string)
+  : Promise<string[] | {sensors: string[], count: number}> => {
+  const sensors = Array.isArray(sensor) ? sensor : [sensor];
+
   if (c) {
     const count = parseInt(c, 10);
     console.log("returning sensors and count");
-    return { sensor, count };
+    return { sensors, count };
     // eslint-disable-next-line no-else-return
   } else {
     console.log("returning just sensors");
-    return sensor;
+    return sensors;
   }
 };
 
-export const postData = async (
-  rawData: RawSensorData[],
-): Promise<SensorPOSTResponse> => {
+export const postData = async (rawData: RawSensorData[]): Promise<SensorPOSTResponse> => {
   console.log("In post data");
-  const dataArray = rawData.map((el) => ({
+  const processedData = rawData.map((el) => ({
     ...el,
     time: Math.floor(new Date().getTime() / 1000),
   }));
 
-  const record = await Sensor.create(dataArray);
-  return { status: "success", message: "Sensors were saved!", handledSensors: record.map((e) => e.name) };
+  const record = await Sensor.create(processedData);
+  return { success: true, message: "Sensors were saved!", handledSensors: record.map((e) => e.name) };
 };

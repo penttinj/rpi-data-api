@@ -57,7 +57,7 @@ export const logger: winston.Logger = winston.createLogger({
   ],
 });
 
-if (NODE_ENV !== 'production') {
+if (NODE_ENV === 'development') {
   logger.add(new winston.transports.Console({
     format: winston.format.simple(),
     level: "silly",

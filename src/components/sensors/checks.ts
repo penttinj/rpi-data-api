@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
-  Request, Response, NextFunction, RequestHandler,
+  Request, Response, NextFunction,
 } from "express";
 import { logger, emptyQuery } from "../../utils";
 import { HTTP400Error } from "../../utils/httpErrors";
@@ -12,7 +12,13 @@ export const sensorList = [
   "inside_humidity",
   "outside_temperature",
   "outside_humidity",
-  "co2"];
+  "co2",
+  "fakeSensor",
+];
+
+export const placesList = {
+
+};
 
 const MAX_QUERY_LENGTH = sensorList.length + 1;
 
@@ -27,6 +33,11 @@ const mustInclude = (query: string | string[], compareList: string[]): boolean =
   return true;
 };
 
+const isUniqueArrayItems = (list: string[]): boolean => {
+  console.log("the list:", list);
+  return list.length === new Set(list).size;
+};
+
 export const queryCheck = (req: Request, res: Response, next: NextFunction) => {
   if (emptyQuery(req.query)) {
     logger.info("Query object is empty");
@@ -35,9 +46,13 @@ export const queryCheck = (req: Request, res: Response, next: NextFunction) => {
     throw new HTTP400Error("Too many parameters");
   } else if (!mustInclude(req.query.sensor as string | string[], sensorList)) {
     throw new HTTP400Error("Sensors query contains illegal elements");
-  } else {
-    next();
+  } else if (typeof req.query.sensor !== "string") {
+    if (!isUniqueArrayItems(req.query.sensor as string[])) {
+      console.log("oh crap");
+      throw new HTTP400Error("The sensors query contains duplicate names");
+    }
   }
+  next();
 };
 
 export const bodyCheck = (req: Request, res: Response, next: NextFunction) => {
@@ -46,11 +61,10 @@ export const bodyCheck = (req: Request, res: Response, next: NextFunction) => {
     sensorList,
   )) {
     throw new HTTP400Error("The sensors list contains illegal elements");
+  }
+  if (!isUniqueArrayItems(req.body.data.map((el: RawSensorData) => el.name.toLocaleLowerCase()))) {
+    throw new HTTP400Error("The sensors list contains duplicate names");
   } else {
     next();
   }
-};
-
-export const sanitize = (req: Request, res: Response, next: NextFunction) => {
-
 };
