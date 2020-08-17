@@ -1,5 +1,5 @@
-import { userInfo } from "os";
 import { Sensor } from "./SensorsModel";
+import { sensorList } from "./checks";
 
 type UnixTime = number;
 export interface DataPoint {
@@ -35,52 +35,26 @@ export interface RawSensorData {
   place: string;
 }
 
-const hello: DataPoint = {
-  name: "erer",
-  value: 122,
-  place: "Inside",
-  time: new Date().getTime(),
-};
-
-const mockData: Data = [
-  [hello, hello, hello],
-  [hello, hello, hello],
-  [hello, hello, hello],
-];
-
 export const getData = async (query: dataQuery): Promise<SensorGETResponse> => {
-  console.log("getData query: ", query);
-  const result: DataPoint[][] = [];
+  let result: DataPoint[][] = [];
   if (Array.isArray(query)) {
-    if (query.length === 1) {
-      // Get single sensor
-      const data = await Sensor.findByName(query);
-      console.log("getData single sensoe result:", data);
-      result.push(data);
-    } else {
-      // Get multiple sensors
-      const data = await Sensor.findByName(query);
-      console.log("getData multiple sensor result:", (data as DataPoint[]).map((v) => v.name));
-      result.push(data);
-    }
+    result = query[0] === "everything"
+      ? await Sensor.findByName(sensorList) // Get a reading from all sensors
+      : await Sensor.findByName(query); // Else get the selected sensors in the query
   } else if (typeof query === "object" && (query as IHistoricalDataQuery).count) {
-    console.log("is history object");
-    const data = await Sensor.findByName(query.sensors, query.count);
-    result.push(data);
+    result = await Sensor.findByName(query.sensors, query.count);
   }
 
   if (result.length) {
-    console.log("return success");
     return {
       success: true,
-      message: `Returned ${result.flat().length} data points`,
+      message: `Returned ${result.flat().length} individual readings`,
       data: result,
     };
   }
-  console.log("reached behind all if expressions");
   return {
     success: false,
-    message: `Returned: ${result.flat().length} data points`,
+    message: `Returned: ${result.flat().length} individual readings`,
     data: result,
   };
 };
@@ -91,11 +65,9 @@ export const parseRequest = async (sensor: string[] | string, c?: string)
 
   if (c) {
     const count = parseInt(c, 10);
-    console.log("returning sensors and count");
     return { sensors, count };
     // eslint-disable-next-line no-else-return
   } else {
-    console.log("returning just sensors");
     return sensors;
   }
 };

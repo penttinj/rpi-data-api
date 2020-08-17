@@ -13,7 +13,7 @@ export const sensorList = [
   "outside_temperature",
   "outside_humidity",
   "co2",
-  "fakeSensor",
+  "fakesensor",
 ];
 
 export const placesList = {
@@ -39,19 +39,18 @@ const isUniqueArrayItems = (list: string[]): boolean => {
 };
 
 export const queryCheck = (req: Request, res: Response, next: NextFunction) => {
-  if (emptyQuery(req.query)) {
-    logger.info("Query object is empty");
-    throw new HTTP400Error("Queries were empty");
-  } else if (Object.keys(req.query).length > MAX_QUERY_LENGTH) {
-    throw new HTTP400Error("Too many parameters");
-  } else if (!mustInclude(req.query.sensor as string | string[], sensorList)) {
-    throw new HTTP400Error("Sensors query contains illegal elements");
-  } else if (typeof req.query.sensor !== "string") {
-    if (!isUniqueArrayItems(req.query.sensor as string[])) {
-      console.log("oh crap");
-      throw new HTTP400Error("The sensors query contains duplicate names");
+  if (req.query.sensor) {
+    if (Object.keys(req.query).length > MAX_QUERY_LENGTH) {
+      throw new HTTP400Error("Too many parameters");
+    } else if (!mustInclude(req.query.sensor as string | string[], sensorList)) {
+      throw new HTTP400Error("Sensors query contains illegal elements");
+    } else if (typeof req.query.sensor !== "string") {
+      if (!isUniqueArrayItems(req.query.sensor as string[])) {
+        throw new HTTP400Error("The sensors query contains duplicate names");
+      }
     }
   }
+
   next();
 };
 

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { body, check, query } from "express-validator";
-import { parse } from "path";
 import { queryCheck, bodyCheck } from "./checks";
 import { authenticate } from "../../middleware/authenticate";
 import { handleValidatorResult } from "../../middleware/handleValidatorResult";
@@ -13,8 +12,11 @@ export default [
     path: "/api/sensors",
     method: "get",
     handler: [
-      authenticate,
-      query("sensor.*").exists().trim().escape(), // Yeah these express validators could be in the check
+      query("sensor.*")
+        .optional()
+        .exists()
+        .trim()
+        .escape(),
       query("count")
         .optional()
         .trim()
@@ -26,12 +28,21 @@ export default [
       async (req: Request, res: Response, next: NextFunction) => {
         console.log("GET /api/sensors", req.query);
         const { sensor, count } = req.query;
-        const parsedQuery = await SensorsService.parseRequest(
+        const parsedQuery = sensor === undefined
+          ? ["everything"]
+          : await SensorsService.parseRequest(
           sensor as string[] | string, count as string,
-        );
+          );
+
+        const timeStart = Date.now();
+
         const data = await SensorsService.getData(parsedQuery)
           .catch((e) => next(e));
-        console.log(data);
+
+        const timeEnd = Date.now();
+        const timeElapsed = timeEnd - timeStart;
+        console.log("Time elapsed:", timeElapsed);
+
         res.status(200).json(data);
         res.end();
       },
@@ -56,18 +67,18 @@ export default [
     method: "post",
     handler: [
       authenticate,
-      body(["data.*.name", "data.*.value", "data.*.place"]).exists().trim().escape(),
-      body("data.*.value").isNumeric().toInt(),
+      body(["data.*.name", "data.*.value", "data.*.place"])
+        .exists()
+        .trim()
+        .escape(),
+      body("data.*.value")
+        .isNumeric()
+        .toInt(),
       handleValidatorResult,
       bodyCheck,
       async (req: Request, res: Response, next: NextFunction) => {
         console.log(req.query);
         const result = await SensorsService.postData(req.body.data)
-          /**
-           * Not sure if having a .catch() or try/catch block here is sane, as it also requires this
-           * main controller fuinction to also have a next(). Since something weird unaccounted for
-           * happened at the Service/Model level, maybe this process should just crash?
-           */
           .catch((e) => next(e));
         res.status(200).json(result);
         res.end();

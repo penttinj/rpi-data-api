@@ -1,24 +1,25 @@
-GET http://localhost:4000/api/sensors?sensor=outside_humidity HTTP/1.1
+GET http://localhost:4000/api/sensors?sensor=inside_temperature&count=30000000&sensor=inside_humidity& HTTP/1.1
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMyMSwiaWF0IjoxNTk2MDQxNDQ1LCJleHAiOjE1OTY2NDYyNDV9.0IVLwQpDRo4xyY_UcwEBKwaLjK0jB8fEyms0C-e-15g
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMyMSwiaWF0IjoxNTk3NjAwNzgwLCJleHAiOjE1OTgyMDU1ODB9.Z_E_o7SegTFgf5NE9uM1JNRDCrTUXOGGL7iMlLul560
+
 
 {
   "data": [
     {
       "name": "Outside_Temperature",
-      "value": 99.5,
+      "value": "4.8",
       "place": "Outside",
       "thinggg": "qwepoi"
     },
     {
       "name": "inside_humidity",
-      "value": 44,
+      "value": "4,8",
       "place": "inside"
     },
     {
-      "name": "Inside_TempeRaTuRe",
-      "value": 23,
-      "place": "Outside"
+      "name": "inside_temperature",
+      "value": "4,8",
+      "place": "outside"
     }
   ]
 }

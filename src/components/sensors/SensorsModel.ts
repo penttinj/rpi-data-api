@@ -1,3 +1,5 @@
+/* eslint-disable arrow-body-style */
+/* eslint-disable no-restricted-syntax */
 import mongoose, { Query } from "mongoose";
 import { DataPoint } from "./SensorsService";
 import { HTTP404Error, HTTP400Error } from "../../utils/httpErrors";
@@ -20,9 +22,9 @@ export type SensorModel = mongoose.Model<SensorDocument> & {
   /**
    * Return sensors with the matched name.
    * Accepts string of one sensor or array of sensor names.
-   * @param name Sensor name or array of names.
+   * @param names Sensor name or array of names.
    */
-  findByName(name: string | string[], count?: number): Promise<DataPoint[]>
+  findByName(names: string[], count?: number): Promise<DataPoint[][]>
 }
 
 const sensorSchema = new mongoose.Schema({
@@ -52,25 +54,36 @@ sensorSchema.statics.findByPlace = async function findByPlace(
   return this.find({ place }, (err: Error, docs: SensorDocument[]) => docs);
 };
 sensorSchema.statics.findByName = async function findByName(
-  names: string[], limit = 1,
-): Promise<DataPoint[]> {
-  console.log("findByName: ", names);
-  const result = await Promise.all(
-    names.map(async (sensorName): Promise<DataPoint> => this.find({ name: sensorName }).limit(limit)
-      .then(([doc]: SensorDocument[]) => {
-        if (doc === undefined) {
-          throw new HTTP404Error(`Sensor wasn't (yet) found in database: ${sensorName}`);
+  sensorNames: string[], limit = 1,
+): Promise<DataPoint[][]> {
+  const dataIntervals: DataPoint[][] | PromiseLike<DataPoint[][]> = [];
+
+  const promises = sensorNames.map(async (sensorName) => {
+    return this.find({ name: sensorName }).limit(limit)
+      .then((docs: SensorDocument[]) => {
+        if (docs.length === undefined) {
+          throw new HTTP404Error(`Sensor wasn't found (yet) in database: ${sensorName}`);
         }
-        const {
-          name, value, place, time,
-        } = doc;
-        return {
-          name, value, place, time,
-        };
-      })),
-  );
-  console.log("docz: ", result);
-  return result;
+
+        docs.map(async (doc, i) => {
+          const {
+            name, value, place, time,
+          } = doc;
+          // Fill the index with an empty array to allow .push() method to work
+          if (!dataIntervals[i]) dataIntervals[i] = [];
+          dataIntervals[i].push({
+            name,
+            value,
+            place,
+            time,
+          });
+        });
+      });
+  });
+
+  await Promise.all(promises);
+
+  return dataIntervals;
 };
 
 export const Sensor = mongoose.model<SensorDocument, SensorModel>("Sensor", sensorSchema);

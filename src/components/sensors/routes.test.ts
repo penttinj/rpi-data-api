@@ -17,6 +17,8 @@ jest.mock("jsonwebtoken");
   log: jest.fn(),
 };
 
+// TODO: Mock the sensors list
+
 describe("Sensors Routes", () => {
   let router: Router;
   const auth = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMyMSwiaWF0IjoxNTk1MzI1NzI1LCJleHAiOjE1OTU5MzA1MjV9.1qfw9S2PBdP2m0RWBaS0f5JKNAp3dXMmh5sCw0y_8Ss";
@@ -33,6 +35,12 @@ describe("Sensors Routes", () => {
     mongoose.connection.close();
   });
 
+  test("GET: Valid empty query", async () => {
+    const response = await request(router)
+      .get("/api/sensors")
+      .set("authorization", auth);
+    expect(response.status).toEqual(200);
+  });
   test("GET: Valid query, 2 sensors with history", async () => {
     const response = await request(router)
       .get("/api/sensors?sensor=co2&sensor=inside_temperature&count=11")
@@ -48,7 +56,7 @@ describe("Sensors Routes", () => {
   });
   test("GET: Valid query, 4 sensors", async () => {
     const response = await request(router)
-      .get("/api/sensors?sensor=co2&sensor=outside_humidity&sensor=inside_temperature&sensor=outside_temperature")
+      .get("/api/sensors?sensor=co2&sensor=inside_humidity&sensor=inside_temperature&sensor=outside_temperature")
       .set("authorization", auth);
     expect(response.status).toEqual(200);
     expect(response.body.data[0].length).toBe(4);
