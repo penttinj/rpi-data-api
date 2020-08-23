@@ -12,6 +12,7 @@ export default [
     path: "/api/sensors",
     method: "get",
     handler: [
+      authenticate,
       query("sensor.*")
         .optional()
         .exists()
@@ -91,7 +92,11 @@ export default [
     handler: [
       authenticate,
       async (req: Request, res: Response) => {
-        console.log("");
+        console.log("OPTIONS!!");
+        res.set({
+          Allow: "GET, POST",
+        });
+        res.end();
       },
     ],
   },

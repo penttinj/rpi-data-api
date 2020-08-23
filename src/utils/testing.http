@@ -1,4 +1,4 @@
-GET http://localhost:4000/api/sensors?sensor=inside_temperature&count=30000000&sensor=inside_humidity& HTTP/1.1
+OPTIONS http://localhost:4000/api/sensors HTTP/1.1
 content-type: application/json
 authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMyMSwiaWF0IjoxNTk3NjAwNzgwLCJleHAiOjE1OTgyMDU1ODB9.Z_E_o7SegTFgf5NE9uM1JNRDCrTUXOGGL7iMlLul560
 

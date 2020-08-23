@@ -24,6 +24,8 @@ interface Response {
   message: string;
 }
 interface SensorGETResponse extends Response {
+  intervals: number;
+  total: number;
   data: Data;
 }
 interface SensorPOSTResponse extends Response {
@@ -48,12 +50,16 @@ export const getData = async (query: dataQuery): Promise<SensorGETResponse> => {
   if (result.length) {
     return {
       success: true,
+      intervals: result.length,
+      total: result.flat().length,
       message: `Returned ${result.flat().length} individual readings`,
       data: result,
     };
   }
   return {
     success: false,
+    intervals: result.length,
+    total: result.flat().length,
     message: `Returned: ${result.flat().length} individual readings`,
     data: result,
   };

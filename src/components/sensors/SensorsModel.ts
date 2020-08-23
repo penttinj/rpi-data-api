@@ -53,13 +53,15 @@ sensorSchema.statics.findByPlace = async function findByPlace(
 ): Promise<DataPoint[]> {
   return this.find({ place }, (err: Error, docs: SensorDocument[]) => docs);
 };
+
 sensorSchema.statics.findByName = async function findByName(
   sensorNames: string[], limit = 1,
 ): Promise<DataPoint[][]> {
   const dataIntervals: DataPoint[][] | PromiseLike<DataPoint[][]> = [];
 
   const promises = sensorNames.map(async (sensorName) => {
-    return this.find({ name: sensorName }).limit(limit)
+    return this.find({ name: sensorName })
+      .limit(limit)
       .then((docs: SensorDocument[]) => {
         if (docs.length === undefined) {
           throw new HTTP404Error(`Sensor wasn't found (yet) in database: ${sensorName}`);
