@@ -6,6 +6,7 @@
   "scripts": {
     "debug": "npx tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
     "dev": "tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
+    "generate-token": "node ./dist/utils/generateToken.js",
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "postinstall": "npx tsc",
     "start": "npx pm2 start pm2.yaml",
@@ -49,7 +50,8 @@
     "mongoose": "^5.9.22",
     "swagger-ui-express": "^4.1.4",
     "typescript": "^3.9.6",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "@types/compression": "^1.7.0",

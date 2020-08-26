@@ -95,6 +95,7 @@ export default [
         console.log("OPTIONS!!");
         res.set({
           Allow: "GET, POST",
+          "Cache-Control": "No-Store",
         });
         res.end();
       },
