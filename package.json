@@ -6,14 +6,14 @@
   "scripts": {
     "debug": "npx tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
     "dev": "tsc-watch --onSuccess \"node -r dotenv/config ./dist/server.js\"",
-    "generate-token": "node ./dist/utils/generateToken.js",
+    "generate-token": "node ./dist/bin/generateToken.js",
     "lint": "eslint \"src/**/*.{js,ts}\"",
     "postinstall": "npx tsc",
     "start": "npx pm2 start pm2.yaml",
     "test": "jest --coverage --verbose"
   },
   "bin": {
-   "genToken": "./bin/index.js"
+   "genToken": "./dist/bin/generateToken.js"
  },
   "jest": {
     "testEnvironment": "node",
