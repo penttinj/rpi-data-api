@@ -35,7 +35,7 @@ export const genToken = (options: parsedArgs, secret: string) => {
       owner: options.o,
     }, secret as jwt.Secret, {
       algorithm: 'HS256',
-      expiresIn: "7d",
+      expiresIn: "8760h",
     });
     return accessToken;
   } catch (e) {
