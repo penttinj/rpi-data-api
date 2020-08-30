@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable node/shebang */
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import yargs from "yargs";

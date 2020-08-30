@@ -12,6 +12,9 @@
     "start": "npx pm2 start pm2.yaml",
     "test": "jest --coverage --verbose"
   },
+  "bin": {
+   "genToken": "./bin/index.js"
+ },
   "jest": {
     "testEnvironment": "node",
     "verbose": true,
@@ -65,6 +68,7 @@
     "@types/supertest": "^2.0.10",
     "@types/swagger-ui-express": "^4.1.2",
     "@types/winston": "^2.4.4",
+    "@types/yargs": "^15.0.5",
     "@typescript-eslint/eslint-plugin": "^3.6.0",
     "@typescript-eslint/parser": "^3.6.0",
     "eslint": "^7.4.0",
