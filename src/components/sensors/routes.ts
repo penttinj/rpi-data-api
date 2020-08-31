@@ -15,7 +15,6 @@ export default [
       authenticate,
       query("sensor.*")
         .optional()
-        .exists()
         .trim()
         .escape(),
       query("count")
@@ -27,7 +26,7 @@ export default [
       handleValidatorResult,
       queryCheck,
       async (req: Request, res: Response, next: NextFunction) => {
-        console.log("GET /api/sensors", req.query);
+        console.log("GET /api/sensors queries:", req.query);
         const { sensor, count } = req.query;
         const parsedQuery = sensor === undefined
           ? ["everything"]

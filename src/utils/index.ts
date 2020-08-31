@@ -63,19 +63,3 @@ if (NODE_ENV === 'development') {
     level: "silly",
   }));
 }
-
-// TEST CODE, DELETE DIS. Only used for creating tokens in development
-export const createToken = () => {
-  try {
-    const id = 321;
-
-    const accessToken = jwt.sign({ userId: id }, JWT_SECRET as jwt.Secret, {
-      algorithm: 'HS256',
-      expiresIn: "7d",
-    });
-    console.log("Access Token Generated: ", accessToken);
-    return accessToken;
-  } catch (e) {
-    throw new Error('Token Couldn\'t be created');
-  }
-};

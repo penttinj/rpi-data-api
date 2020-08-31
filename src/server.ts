@@ -3,7 +3,7 @@ import http from "http";
 import express from "express";
 import { PORT } from "./config";
 import {
-  applyMiddleware, applyRoutes, logger, createToken,
+  applyMiddleware, applyRoutes, logger,
 } from "./utils";
 import middleware from "./middleware";
 import routes from "./components";
@@ -11,7 +11,6 @@ import errorHandlers from "./middleware/errorHandlers";
 import { initMongo } from "./config/mongodb";
 
 process.on("uncaughtException", (err: Error) => {
-  // TODO: Add winston log
   console.log("Uncaught Exception");
   console.log(err);
   logger.error(err.stack);
@@ -19,7 +18,6 @@ process.on("uncaughtException", (err: Error) => {
 });
 
 process.on("unhandledRejection", (err: Error) => {
-  // TODO: Add winston log
   console.log(err);
   console.log("Uncaught Rejection");
   logger.error(err.stack);
@@ -32,9 +30,9 @@ async function go() {
   applyRoutes(routes, router);
   applyMiddleware(errorHandlers, router);
 
-  const token = createToken();
-  const server = http.createServer(router);
+  const httpServer = http.createServer(router);
+  // TODO: HTTPS server
   await initMongo();
-  server.listen(PORT, () => console.log(`Server is listening on http://localhost:${PORT}...`));
+  httpServer.listen(PORT, () => console.log(`Server is listening on http://localhost:${PORT}...`));
 }
 go();
