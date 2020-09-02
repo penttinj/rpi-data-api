@@ -13,8 +13,8 @@
     "test": "jest --coverage --verbose"
   },
   "bin": {
-   "genToken": "./dist/bin/generateToken.js"
- },
+    "genToken": "./dist/bin/generateToken.js"
+  },
   "jest": {
     "testEnvironment": "node",
     "verbose": true,
@@ -51,6 +51,7 @@
     "got": "^11.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.22",
+    "pm2": "^4.4.1",
     "swagger-ui-express": "^4.1.4",
     "typescript": "^3.9.6",
     "winston": "^3.3.3",

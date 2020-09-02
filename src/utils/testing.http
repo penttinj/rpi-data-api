@@ -1,6 +1,6 @@
-POST http://localhost:4000/api/sensors HTTP/1.1
+POST https://johanpenttinen.xyz/api/anything HTTP/1.1
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIxLCJvd25lciI6ImJvYnNvbiIsImlhdCI6MTU5ODc5NjIwOSwiZXhwIjoxNTk5NDAxMDA5fQ._KIr9E0E8kNWAaHSl0C-0l3osKJulgN1YcYqGw4VVfw
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjksIm93bmVyIjoiam9oYW4iLCJpYXQiOjE1OTg5NTM3MzIsImV4cCI6MTYzMDQ4OTczMn0.YZ8Hw9BTG7r2_XjP8iRwcD_Y35A_M3254JRJmErK9wI
 
 
 {
@@ -26,6 +26,6 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIxLCJvd25lciI6ImJv
 
 ###
 
-GET http://localhost:4000/api/sensors HTTP/1.1
+GET https://johan.onl/api/sensors?sensor=inside_temperature&sensor=inside_humidity&count=10 HTTP/1.1
 content-type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzIxLCJvd25lciI6ImJvYnNvbiIsImlhdCI6MTU5ODc5NjIwOSwiZXhwIjoxNTk5NDAxMDA5fQ._KIr9E0E8kNWAaHSl0C-0l3osKJulgN1YcYqGw4VVfw
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NjksIm93bmVyIjoiam9oYW4iLCJpYXQiOjE1OTg5NTM3MzIsImV4cCI6MTYzMDQ4OTczMn0.YZ8Hw9BTG7r2_XjP8iRwcD_Y35A_M3254JRJmErK9wI

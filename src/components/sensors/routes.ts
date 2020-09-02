@@ -49,20 +49,6 @@ export default [
     ],
   },
   {
-    path: "/api/sensors/:when",
-    method: "get",
-    handler: [
-      authenticate,
-      // sensorDataQuery,
-      async (req: Request, res: Response) => {
-        console.log(req.query);
-        console.log(req.params);
-        res.status(200).json({ hey: "yo" });
-        res.end();
-      },
-    ],
-  },
-  {
     path: "/api/sensors",
     method: "post",
     handler: [
@@ -72,15 +58,34 @@ export default [
         .trim()
         .escape(),
       body("data.*.value")
-        .isNumeric()
-        .toInt(),
+        .isNumeric(),
       handleValidatorResult,
       bodyCheck,
       async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.query);
         const result = await SensorsService.postData(req.body.data)
           .catch((e) => next(e));
         res.status(200).json(result);
+        res.end();
+      },
+    ],
+  },
+  {
+    path: "/api/sensors/guest",
+    method: "get",
+    handler: [
+      async (req: Request, res: Response, next: NextFunction) => {
+        // An unauthorized user is allowed to get the latest data of all sensors
+        console.log("GET /api/sensors/guest");
+        const timeStart = Date.now();
+
+        const data = await SensorsService.getData(["everything"])
+          .catch((e) => next(e));
+
+        const timeEnd = Date.now();
+        const timeElapsed = timeEnd - timeStart;
+        console.log("Time elapsed:", timeElapsed);
+
+        res.status(200).json(data);
         res.end();
       },
     ],

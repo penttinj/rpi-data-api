@@ -62,6 +62,7 @@ sensorSchema.statics.findByName = async function findByName(
   const promises = sensorNames.map(async (sensorName) => {
     return this.find({ name: sensorName })
       .limit(limit)
+      .sort({ time: "desc" })
       .then((docs: SensorDocument[]) => {
         if (docs.length === undefined) {
           throw new HTTP404Error(`Sensor wasn't found (yet) in database: ${sensorName}`);

@@ -1,0 +1,10 @@
+apps:
+  - script: ./dist/server.js
+    name: rpi-sensors-api
+    env:
+      NODE_ENV: production
+      PORT: 3000      
+      MONGODB_URL: <URL>
+      MONGODB_USER: <USER>
+      MONGODB_PW: <PASSWORD>
+      JWT_SECRET: <some string or a GPG private key used for signing and verifying tokens>
